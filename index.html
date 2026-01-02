@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Equipment Comparison Dashboard | JetX A5 vs ISTOBAL vs AUTEC</title>
+      <style>
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body {
+                              font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+                              background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                              min-height: 100vh;
+                              color: #e4e4e7;
+                              padding: 2rem;
+                }
+                .dashboard { max-width: 1400px; margin: 0 auto; }
+                header {
+                              text-align: center;
+                              margin-bottom: 2rem;
+                              padding-bottom: 1.5rem;
+                              border-bottom: 1px solid rgba(255,255,255,0.1);
+                }
+                h1 {
+                              font-size: 2rem;
+                              font-weight: 600;
+                              background: linear-gradient(90deg, #60a5fa, #a78bfa);
+                              -webkit-background-clip: text;
+                              -webkit-text-fill-color: transparent;
+                              background-clip: text;
+                              margin-bottom: 0.5rem;
+                }
+                .subtitle { color: #94a3b8; font-size: 1rem; }
+                .product-showcase {
+                              display: grid;
+                              grid-template-columns: repeat(3, 1fr);
+                              gap: 1.5rem;
+                              margin-bottom: 2rem;
+                }
+                .product-card {
+                              background: rgba(255,255,255,0.05);
+                              border-radius: 16px;
+                              padding: 1.5rem;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              backdrop-filter: blur(10px);
+                              text-align: center;
+                              transition: transform 0.2s, box-shadow 0.2s;
+                }
+                .product-card:hover {
+                              transform: translateY(-4px);
+                              box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+                }
+                .product-card.jetx { border-top: 3px solid #22d3ee; }
+                .product-card.istobal { border-top: 3px solid #a78bfa; }
+                .product-card.autec { border-top: 3px solid #4ade80; }
+                .product-card img {
+                              width: 100%;
+                              height: 180px;
+                              object-fit: cover;
+                              border-radius: 12px;
+                              margin-bottom: 1rem;
+                              background: rgba(255,255,255,0.08);
+                }
+                .product-card h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+                .product-card h3.jetx { color: #22d3ee; }
+                .product-card h3.istobal { color: #a78bfa; }
+                .product-card h3.autec { color: #4ade80; }
+                .product-card .origin { font-size: 0.8rem; color: #94a3b8; }
+                .stats-grid {
+                              display: grid;
+                              grid-template-columns: repeat(3, 1fr);
+                              gap: 1.5rem;
+                              margin-bottom: 2rem;
+                }
+                .stat-card {
+                              background: rgba(255,255,255,0.05);
+                              border-radius: 16px;
+                              padding: 1.5rem;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              backdrop-filter: blur(10px);
+                }
+                .stat-card h3 {
+                              font-size: 0.85rem;
+                              color: #94a3b8;
+                              text-transform: uppercase;
+                              letter-spacing: 0.05em;
+                              margin-bottom: 1rem;
+                }
+                .stat-row {
+                              display: flex;
+                              justify-content: space-between;
+                              align-items: center;
+                              padding: 0.5rem 0;
+                              border-bottom: 1px solid rgba(255,255,255,0.05);
+                }
+                .stat-row:last-child { border-bottom: none; }
+                .stat-label { font-size: 0.9rem; color: #cbd5e1; }
+                .stat-value { font-weight: 600; font-size: 1.1rem; }
+                .stat-value.jetx { color: #22d3ee; }
+                .stat-value.istobal { color: #a78bfa; }
+                .stat-value.autec { color: #4ade80; }
+                .table-container {
+                              background: rgba(255,255,255,0.03);
+                              border-radius: 16px;
+                              border: 1px solid rgba(255,255,255,0.1);
+                              overflow: hidden;
+                              margin-bottom: 2rem;
+                }
+                table { width: 100%; border-collapse: collapse; }
+                thead { position: sticky; top: 0; z-index: 10; }
+                th {
+                              background: #1e293b;
+                              padding: 1rem;
+                              text-align: left;
+                              font-weight: 600;
+                              font-size: 0.9rem;
+                              color: #f1f5f9;
+                              border-bottom: 2px solid rgba(96, 165, 250, 0.5);
+                }
+                th:first-child { width: 22%; }
+                th:nth-child(2) { border-top: 3px solid #22d3ee; }
+                th:nth-child(3) { border-top: 3px solid #a78bfa; }
+                th:nth-child(4) { border-top: 3px solid #4ade80; }
+                th .th-content { display: flex; align-items: center; gap: 0.75rem; }
+                th img {
+                              width: 50px;
+                              height: 35px;
+                              object-fit: cover;
+                              background: rgba(255,255,255,0.10);
+                              border-radius: 6px;
+                              border: 1px solid rgba(255,255,255,0.20);
+                }
+                td {
+                              padding: 0.875rem 1rem;
+                              border-bottom: 1px solid rgba(255,255,255,0.05);
+                              font-size: 0.9rem;
+                              vertical-align: top;
+                              line-height: 1.5;
+                }
+                tr:hover td { background: rgba(255,255,255,0.03); }
+                td:first-child { font-weight: 500; color: #94a3b8; }
+                .section-title td {
+                              background: linear-gradient(90deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
+                              font-weight: 600;
+                              color: #60a5fa;
+                              font-size: 0.95rem;
+                              padding: 0.75rem 1rem;
+                }
+                footer {
+                              text-align: center;
+                              padding-top: 1.5rem;
+                              border-top: 1px solid rgba(255,255,255,0.1);
+                              color: #94a3b8;
+                              font-size: 0.85rem;
+                }
+                @media (max-width: 1024px) {
+                              .stats-grid, .product-showcase { grid-template-columns: 1fr; }
+                              body { padding: 1rem; }
+                              .table-container { overflow-x: auto; }
+                              table { min-width: 900px; }
+                }
+                @media print {
+                              body { padding: 12mm; }
+                              .table-container { overflow: visible; }
+                              thead { position: static; }
+                }
+            </style>
+  </head>
+  <body>
+        <div class="dashboard">
+                  <header>
+                                <h1>Equipment Comparison Dashboard</h1>
+                              <p class="subtitle">In-Bay Automatic Rollover Car Wash Systems</p>p>
+                  </header>        
+                <div class="product-showcase">
+                            <div class="product-card jetx">
+                                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc4MDAnIGhlaWdodD0nNDUwJz4KPGRlZnM+CiAgPGxpbmVhckdyYWRpZW50IGlkPSdnJyB4MT0nMCcgeTE9JzAnIHgyPScxJyB5Mj0nMSc+CiAgICA8c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyMyMmQzZWUnIHN0b3Atb3BhY2l0eT0nMC45NScvPgogICAgPHN0b3Agb2Zmc2V0PScxJyBzdG9wLWNvbG9yPScjMGIxMjIwJyBzdG9wLW9wYWNpdHk9JzEnLz4KICAKPC9kZWZzPgpkcmVjdCB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWxsPSd1cmwoI2cpJy8+Cjxyc2N0IHg9JzE4JyB5PScxOCcgd2lkdGg9Jzc2NCcgaGVpZ2h0PSc0MTQnIHJ4PScxOCcgZmlsbD0ncmdiYSgyNTUsMjU1LDI1NSwwLjA2KScgc3Ryb2tlPSdyZ2JhKDI1NSwyNTUsMjU1LDAuMjUpJy8+Cjx0ZXh0IHg9JzUwJScgeT0nNDglJSB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LWZhbWlseT0nU2Vnb2UgVUksIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZicgZm9udC1zaXplPSc0NCcgZmlsbD0nd2hpdGUnIGZvbnQtd2VpZ2h0PSc3MDAiPkpldFggQTU8L3RleHQ+Cjx0ZXh0IHg9JzUwJScgeT0nNjAlJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LWZhbWlseT0nU2Vnb2UgVUksIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZicgZm9udC1zaXplPSoyMCcgZmlsbD0ncmdiYSgyNTUsMjU1LDI1NSwwLjg1KSc+SW1hZ2UgcGxhY2Vob2xkZXI8L3RleHQ+Cjwvc3ZnPg==" alt="JetX A5">
+                                            <h3 class="jetx">JetX A5</h3>
+                                            <p class="origin">Compact Smart Rollover</p>p>
+                            </div>div>
+                            <div class="product-card istobal">
+                                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc4MDAnIGhlaWdodD0nNDUwJz4KPGRlZnM+CiAgPGxpbmVhckdyYWRpZW50IGlkPSdnJyB4MT0nMCcgeTE9JzAnIHgyPScxJyB5Mj0nMSc+CiAgICA8c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyNhNzhiZmEnIHN0b3Atb3BhY2l0eT0nMC45NScvPgogICAgPHN0b3Agb2Zmc2V0PScxJyBzdG9wLWNvbG9yPScjMGIxMjIwJyBzdG9wLW9wYWNpdHk9JzEnLz4KICAKPC9kZWZzPgpkcmVjdCB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWxsPSd1cmwoI2cpJy8+Cjxyc2N0IHg9JzE4JyB5PScxOCcgd2lkdGg9Jzc2NCcgaGVpZ2h0PSc0MTQnIHJ4PScxOCcgZmlsbD0ncmdiYSgyNTUsMjU1LDI1NSwwLjA2KScgc3Ryb2tlPSdyZ2JhKDI1NSwyNTUsMjU1LDAuMjUpJy8+Cjx0ZXh0IHg9JzUwJScgeT0nNDglJSB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LWZhbWlseT0nU2Vnb2UgVUksIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZicgZm9udC1zaXplPSc0NCcgZmlsbD0nd2hpdGUnIGZvbnQtd2VpZ2h0PSc3MDAiPklTVE9CQUw8L3RleHQ+Cjx0ZXh0IHg9JzUwJScgeT0nNjAlJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LWZhbWlseT0nU2Vnb2UgVUksIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZicgZm9udC1zaXplPSoyMCcgZmlsbD0ncmdiYSgyNTUsMjU1LDI1NSwwLjg1KSc+SW1hZ2UgcGxhY2Vob2xkZXI8L3RleHQ+Cjwvc3ZnPg==" alt="ISTOBAL">
+                                            <h3 class="istobal">ISTOBAL</h3>
+                                            <p class="origin">Modular In-Bay Automatic</p>p>
+                            </div>div>
+                            <div class="product-card autec">
+                                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc4MDAnIGhlaWdodD0nNDUwJz4KPGRlZnM+CiAgPGxpbmVhckdyYWRpZW50IGlkPSdnJyB4MT0nMCcgeTE9JzAnIHgyPScxJyB5Mj0nMSc+CiAgICA8c3RvcCBvZmZzZXQ9JzAnIHN0b3AtY29sb3I9JyM0YWRlODAnIHN0b3Atb3BhY2l0eT0nMC45NScvPgogICAgPHN0b3Agb2Zmc2V0PScxJyBzdG9wLWNvbG9yPScjMGIxMjIwJyBzdG9wLW9wYWNpdHk9JzEnLz4KICAKPC9kZWZzPgpkcmVjdCB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWxsPSd1cmwoI2cpJy8+Cjxyc2N0IHg9JzE4JyB5PScxOCcgd2lkdGg9Jzc2NCcgaGVpZ2h0PSc0MTQnIHJ4PScxOCcgZmlsbD0ncmdiYSgyNTUsMjU1LDI1NSwwLjA2KScgc3Ryb2tlPSdyZ2JhKDI1NSwyNTUsMjU1LDAuMjUpJy8+Cjx0ZXh0IHg9JzUwJScgeT0nNDglJSB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LWZhbWlseT0nU2Vnb2UgVUksIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZicgZm9udC1zaXplPSc0NCcgZmlsbD0nd2hpdGUnIGZvbnQtd2VpZ2h0PSc3MDAiPkFVVEVDIEVuZHVyYTwvdGV4dD4KPHRleHQgeD0nNTAlJyB5PSc2MCUnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGZvbnQtZmFtaWx5PSdTZWdvZSBVSSwgc3lzdGVtLXVpLCAtYXBwbGUtc3lzdGVtLCBzYW5zLXNlcmlmJyBmb250LXNpemU9JzIwJyBmaWxsPSdyZ2JhKDI1NSwyNTUsMjU1LDAuODUpJz5JbWFnZSBwbGFjZWhvbGRlcjwvdGV4dD4KPC9zdmc+" alt="AUTEC Endura">
+                                            <h3 class="autec">AUTEC Endura</h3>
+                                            <p class="origin">High Throughput Hydraulic</p>p>
+                            </div>div>
+                </div>div>
+        
+                <div class="stats-grid">
+                            <div class="stat-card">
+                                            <h3>Throughput (cars/hour)</h3>
+                                            <div class="stat-row"><span class="stat-label">JetX A5</span>span><span class="stat-value jetx">15–25</span>span></div>div>
+                                            <div class="stat-row"><span class="stat-label">ISTOBAL</span>span><span class="stat-value istobal">12–20</span>span></div>div>
+                                            <div class="stat-row"><span class="stat-label">AUTEC Endura</span>span><span class="stat-value autec">Up to 30</span>span></div>div>
+                            </div>div>
+                            <div class="stat-card">
+                                            <h3>Bay Length Required</h3>
+                                            <div class="stat-row"><span class="stat-label">JetX A5</span>span><span class="stat-value jetx">~66 ft</span>span></div>div>
+                                            <div class="stat-row"><span class="stat-label">ISTOBAL</span>span><span class="stat-value istobal">~79 ft</span>span></div>div>
+                                            <div class="stat-row"><span class="stat-label">AUTEC Endura</span>span><span class="stat-value autec">35–45 ft</span>span></div>div>
+                            </div>div>
+                            <div class="stat-card">
+                                            <h3>Key Edge</h3>
+                                            <div class="stat-row"><span class="stat-label">JetX A5</span>span><span class="stat-value jetx">Smallest footprint</span>span></div>div>
+                                            <div class="stat-row"><span class="stat-label">ISTOBAL</span>span><span class="stat-value istobal">Modular 3→5 brush</span>span></div>div>
+                                            <div class="stat-row"><span class="stat-label">AUTEC Endura</span>span><span class="stat-value autec">Highest throughput</span>span></div>div>
+                            </div>div>
+                </div>div>
+        
+                <div class="table-container">
+                            <table>
+                                              <thead>
+                                                                    <tr>
+                                                                                              <th>Specification</th>
+                                                                      <th><div class="th-content">JetX A5</div>div></th>
+                                                                      <th><div class="th-content">ISTOBAL</div>div></th>
+                                                                      <th><div class="th-content">AUTEC Endura</div>div></th>
+                                                                    </tr>
+                                              </thead>
+                                            <tbody>
+                                                                  <tr class="section-title"><td colspan="4">DIMENSIONS</td>td></tr>tr>
+                                                                  <tr><td>Machine Length</td><td>4.6m (15.1 ft)</td><td>5.5m (18 ft)</td><td>12 ft 4 in (track 25-30 ft)</td></tr>
+                                                <tr><td>Machine Width</td>td><td>3.2m (10.5 ft)</td>td><td>3.5m (11.5 ft)</td>td><td>13 ft 8 in</td>td></tr>
+                                                <tr><td>Machine Height</td><td>2.6m (8.5 ft)</td><td>3.2m (10.5 ft)</td><td>10 ft 6 in (clearance 7 ft)</td></tr>
+                                                <tr><td>Track Length Required</td>td><td>20m (65.6 ft) min bay</td>td><td>24m (79 ft) recommended</td>td><td>35-45 ft bay length typical</td>td></tr>
+                                                <tr><td>Weight</td><td>~2,500 kg (5,500 lbs)</td><td>~3,200 kg (7,050 lbs)</td><td>~6,500 lbs (base unit)</td></tr>
+                                                <tr class="section-title"><td colspan="4">VEHICLE CAPACITY</td></tr>
+                                                <tr><td>Max Vehicle Height</td>td><td>2.1m (6.9 ft)</td>td><td>2.3m (7.5 ft)</td>td><td>7 ft 0 in</td>td></tr>
+                                                <tr><td>Max Vehicle Width</td><td>2.3m (7.5 ft)</td><td>2.5m (8.2 ft)</td><td>7 ft 6 in</td></tr>
+                                                <tr><td>Max Vehicle Length</td>td><td>5.5m (18 ft)</td>td><td>5.5m (18 ft)</td>td><td>22 ft (extended track)</td>td></tr>
+                                                <tr><td>Suitable Vehicles</td><td>Sedans, SUVs, light trucks</td><td>Sedans to full-size trucks, vans</td><td>Full-size pickups, SUVs, vans, box trucks</td></tr>
+                                                <tr class="section-title"><td colspan="4">ELECTRICAL</td></tr>
+                                                <tr><td>Voltage</td>td><td>380V/50Hz or 480V/60Hz</td>td><td>400V 3-phase (EU), 208-480V (NA)</td>td><td>208-230V or 460V 3-phase</td>td></tr>
+                                                <tr><td>Operating Power</td><td>28kW (operating)</td><td>20-30 kW typical</td><td>50A @ 208-230V / 25A @ 460V</td></tr>
+                                                <tr><td>Connected Load</td>td><td>50kW connected (67hp)</td>td><td>25-50 kVA (config dependent)</td>td><td>10 HP hydraulic + dryers</td>td></tr>
+                                                <tr><td>Standby Power</td><td>0.1 kWh/hr (50W)</td><td>—</td><td>—</td></tr>
+                                                <tr><td>Motor Specifications</td>td><td>DC motors (IP67)</td>td><td>VFD controlled, soft-start</td>td><td>10hp hydraulic pump (1000 psi)</td>td></tr>
+                                                <tr class="section-title"><td colspan="4">WATER</td>td></tr>
+                                                <tr><td>Water per Wash</td><td>15-40 gal (56-150L)</td><td>40-60 gal (150-230L)</td><td>20-30 gal typical</td></tr>
+                                                <tr><td>Peak Water Demand</td>td><td>—</td>td><td>—</td>td><td>26 GPM @ 40 psi</td>td></tr>
+                                                <tr><td>Water Pressure Required</td><td>—</td><td>30-60 psi (3-6 bar)</td><td>40 psi minimum</td></tr>
+                                                <tr><td>Water Reclaim Compatible</td>td><td>Yes</td>td><td>Yes</td>td><td>Yes — reduces to 10-15 gal/car</td>td></tr>
+                                                <tr><td>Hot Water Required</td><td>Optional</td><td>Optional</td><td>Yes — 120°F recommended</td></tr>
+                                                <tr class="section-title"><td colspan="4">SITE — UTILITIES</td></tr>
+                                                <tr><td>Compressed Air</td>td><td>—</td>td><td>6-8 bar (90-115 psi), 5-7 CFM</td>td><td>5 CFM @ 100 psi</td>td></tr>
+                                                <tr><td>Drainage</td><td>Integrated floor drains</td><td>Sump pit required</td><td>Floor drains, optional trench</td></tr>
+                                                <tr><td>Chemical Storage</td>td><td>On-board tanks</td>td><td>Multiple tanks/injectors</td>td><td>External drums with Venturi injectors</td>td></tr>
+                                                <tr class="section-title"><td colspan="4">SITE — INSTALLATION</td>td></tr>
+                                                <tr><td>Foundation Type</td><td>Concrete slab</td><td>Concrete slab with anchors</td><td>4"-6" concrete slab with rebar</td></tr>
+                                                <tr><td>Pit Required</td>td><td>No</td>td><td>No (sump/trench only)</td>td><td>No</td>td></tr>
+                                                <tr><td>Freeze Protection</td><td>All-weather IP67 rated</td><td>Floor heat, insulated bay, tempered water</td><td>Auto freeze protection, heated bay recommended</td></tr>
+                                                <tr class="section-title"><td colspan="4">CONSTRUCTION</td></tr>
+                                                <tr><td>Frame Material</td>td><td>Modular design</td>td><td>Hot-dip galvanized steel</td>td><td>100% stainless steel (304/316)</td>td></tr>
+                                                <tr><td>Corrosion Protection</td><td>&gt;55μm zinc coating</td><td>Galvanized + powder coat</td><td>33 &amp; 24 stainless tubing, all-welded</td></tr>
+                                                <tr><td>Drive System</td>td><td>Precise DC motor control</td>td><td>Hydraulic + electric VFD hybrid</td>td><td>All-hydraulic drive (10hp HPU)</td>td></tr>
+                                                <tr><td>Certifications</td><td>CE certified, UL listed</td><td>CE marked (EU), ETL/UL listed (NA)</td><td>ETL/cETL Listed (UL 73, UL 508A)</td></tr>
+                                                <tr class="section-title"><td colspan="4">MAINTENANCE</td></tr>
+                                                <tr><td>Maintenance Level</td>td><td>Low — advanced components</td>td><td>Moderate — quarterly PM</td>td><td>Low — greaseless sealed bearings</td>td></tr>
+                                                <tr><td>Brush Life</td><td>~100,000 washes</td><td>~100,000 washes</td><td>~100,000 washes</td></tr>
+                                                <tr><td>Warranty</td>td><td>—</td>td><td>1 yr parts/labor (EU), 1 yr parts (NA)</td>td><td>90 days labor / 1 yr parts / 2 yr structural</td>td></tr>
+                                                <tr><td>Remote Diagnostics</td><td>Yes (cloud-based)</td><td>Yes — Smartwash</td><td>Optional — VPN remote login</td></tr>
+                                                <tr class="section-title"><td colspan="4">KEY DIFFERENTIATORS</td></tr>
+                                                <tr><td>Differentiator 1</td>td><td>World's smallest smart rollover/IBA</td>td><td>First &amp; only modular 3→5 brush upgrade</td>td><td>Highest throughput (30 cph)</td>td></tr>
+                                                <tr><td>Differentiator 2</td><td>Autonomous AI visual recognition</td><td>30% faster with 5-brush config</td><td>4× longer lifespan claimed</td></tr>
+                                                <tr><td>Differentiator 3</td>td><td>20% less energy, 32% smaller</td>td><td>Extensive HP hybrid/touchless</td>td><td>100% stainless steel, hydraulic reliability</td>td></tr>
+                                                <tr><td>Target Market</td><td>Compact, urban, limited space</td><td>High-volume retail, dealers, fleets</td><td>Auto dealerships, service centers, fleet ops</td></tr>
+                                            </tbody>
+                            </table>
+                </div>div>
+        
+                <footer>
+                              <p>Equipment Comparison Dashboard • Generated January 2026</p>
+                </footer>
+        </div>div>
+  </body>
+</html>html></p>
+                </footer></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr></tr></td></td></tr>
+                                            </tbody></th></th>
+                                                                    </tr>
+                                              </thead>
+                            </table></h3></h1>
+                  </header>
+  </body>
+      </style></title>
+  </head>
